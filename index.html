@@ -1,0 +1,90 @@
+<!DOCTYPE>
+<html>
+    <head>
+        <title> Building Dataset </title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css"/>
+        <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+        <style>
+            .showHideColumn{
+                cursor:pointer;
+            }
+            th {
+                background-color: #4CAF50;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        <br /><br />
+        <div class="container">
+            <h1 align="center"> Personal Records </h1><br/>
+
+            <div style="padding: 5px; padding-left: 0px">
+                <b>Show / Hide Columns: </b>
+                <a class="showHideColumn" data-columnindex="0">Name</a>
+                <a class="showHideColumn" data-columnindex="1">Designation</a>
+                <a class="showHideColumn" data-columnindex="2">Nationality</a>
+            </div>
+        
+            <div style="width:1000px; border: 1px solid black; padding: 3px">
+            <table id="data-table" class="table table-bordered table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Designation</th>
+                        <th>Nationality</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Name</th>
+                        <th>Designation</th>
+                        <th>Nationality</th>
+                    </tr>
+                </tfoot>
+            </table>
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+
+$(document).ready(function(){
+    var table = $('#data-table').DataTable({
+        "ajax" : "records.json",
+        "pagingType": "full_numbers",
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "sort" : true,
+        "searching" : true,
+        "scrollY"  : "400px",
+        "columns" : [
+            {  "data" : "name" },
+            {  "data" : "designation" },
+            {  "data" : "nationality" }
+        ]
+    });
+    //Individual Column search
+    $('#data-table tfoot th').each(function(){
+        var title = $('#data-table thead th').eq($(this).index()).text();
+        $(this).html( '<input type="text" placeholder="Search ' + title +'" />' );
+    });
+        table.columns().every( function () {
+        var that = this;
+
+        $(this.footer() ).on( 'keyup change', function () {
+        that.search(this.value).draw();
+        } );
+    } );
+
+    // Show/hide Columns
+    $('.showHideColumn').on( 'click', function () { 
+        // Get the column API object
+        var column = table.column( $(this).attr('data-columnindex') ); 
+        // Toggle the visibility
+        column.visible( ! column.visible() );
+    } );   
+});
+</script>
