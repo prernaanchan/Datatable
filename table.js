@@ -1,15 +1,16 @@
 $(document).ready(function(){
     var table = $('#data-table').DataTable({
         "ajax" : "records.json",
-        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
-        "sort" : true,
-        "searching" : true,
-        "scrollY"  : "400px",
-        "columns" : [
+         "columns" : [
             {  "data" : "name" },
             {  "data" : "designation" },
             {  "data" : "nationality" }
-        ]
+        ],        
+        "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]],
+        "sort" : true,
+        "searching" : true,
+        "scrollY"  : "400px"
+        
     });
     //Individual Column search
     $('#data-table tfoot th').each(function(){
